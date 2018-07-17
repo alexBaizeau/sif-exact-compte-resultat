@@ -9,13 +9,15 @@
         ["-", 700270],
         ["-", 708020],
         ["-", 703000],
-        ["-", 701000]
+        ["-", 701000],
+        ["-", 706200]
       ],
       "Reprise sur amortissements & prov.": [
         ["+", 781740]
       ],
       "Autres produits": [
-        ["-", 758000]
+        ["-", 758000],
+        ["-", 758103]
       ]
   },
   "CHARGES D'EXPLOITATION":
@@ -83,6 +85,7 @@
     "Salaires et charges de production":
     [
       ["-", 641110],
+      ["-", 741000],
       ["-", 641115],
       ["-", 641200],
       ["-", 641210],
@@ -165,7 +168,8 @@
   "PRODUITS FINANCIERS":
   {
     "Pdts autres valeurs & créan. actif":[
-      ["+", 765000]
+      ["+", 765000],
+      ["-", 764100]
     ]
   },
   "CHARGES FINANCIERES":
