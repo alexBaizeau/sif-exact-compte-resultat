@@ -25,3 +25,8 @@ python compte_de_resultat.py setup --base-url=https://www.mycompany.com --client
 ```bash
 python compte_de_resultat.py excel --annee_fiscale=2018
 ```
+
+## Create an executable avec PyInstaller
+```
+./env/bin/pyinstaller -p ./env/bin/python compte_de_resultat.py --add-data 'config.ini:.' --add-data 'rapport_config.json:.'
+```

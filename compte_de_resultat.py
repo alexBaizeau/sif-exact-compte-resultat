@@ -68,7 +68,7 @@ def excel(annee_fiscale):
 
 
     now = datetime.datetime.now()
-    current_year = now.year if now.month > 9 else now.year+1
+    current_year = now.year if now.month < 9 else now.year+1
     current_year = annee_fiscale if annee_fiscale else current_year
 
     starting_date = datetime.date(current_year - 1, 10, 1)
@@ -127,7 +127,7 @@ def excel(annee_fiscale):
     for month_index in months:
         report_date = starting_date + relativedelta(months=month_index)
         financial_lines = request_financial_lines(api, current_divisions, report_date.year, report_date.month)
-        unused_lines = unused_lines + find_unused_lines(financial_lines, all_accounts)
+        unused_lines = unused_lines + find_unused_lines(financial_lines, used_accounts)
 
         for key, value in tableau.iteritems():
             if is_subcategory(value):
@@ -284,7 +284,8 @@ def find_account_total(account_number, all_financial_lines):
 
 def request_financial_lines(api, current_division, year, month):
     date_filter = "year(Date)+eq+%d+and+month(Date)+eq+%d+and+(startswith(GLAccountCode,'6')+eq+true+or+startswith(GLAccountCode,'7')+eq+true)" % (year, month)
-    return api.rest(GET("v1/%d/financialtransaction/TransactionLines?$select=AmountDC,Date,EntryNumber,FinancialPeriod,FinancialYear,GLAccountCode,GLAccountDescription&$filter=%s" % (current_division, date_filter)))
+    request =  "v1/%d/financialtransaction/TransactionLines?$select=AmountDC,Date,EntryNumber,FinancialPeriod,FinancialYear,GLAccountCode,GLAccountDescription&$filter=%s" % (current_division, date_filter)
+    return api.rest(GET(request))
 
 def make_account_list_totals(operation, account_number, financial_lines, month_index, *accumulateurs):
     account_total = find_account_total(account_number, financial_lines)
