@@ -1,0 +1,4 @@
+[server]
+auth_url = https://start.exactonline.be/api/oauth2/auth
+rest_url = https://start.exactonline.be/api
+token_url = https://start.exactonline.be/api/oauth2/token

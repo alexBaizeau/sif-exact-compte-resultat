@@ -1,0 +1,7 @@
+click==6.7
+exactonline==0.3.2
+python-dateutil==2.7.3
+six==1.11.0
+unicodecsv==0.14.1
+Unidecode==1.0.22
+XlsxWriter==1.0.5
