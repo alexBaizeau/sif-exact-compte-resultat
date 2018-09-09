@@ -5,7 +5,7 @@
 
 git clone https://github.com/alexBaizeau/exact-online-api-demo.git
 cd exact-online-api-demo
-virtualenv env
+virtualenv -p python3 env
 . ./env/bin/activate
 pip install -r requirements.txt
 cp config.ini.sample config.ini
