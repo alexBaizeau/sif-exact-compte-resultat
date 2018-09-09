@@ -7,8 +7,8 @@ import webbrowser
 from exactonline.api import ExactApi
 from exactonline.resource import GET
 from exactonline.storage import IniStorage
-from urllib import unquote
-from urllib import quote
+from urllib.parse import unquote
+from urllib.parse import quote
 import datetime
 import xlsxwriter
 import re
@@ -79,7 +79,7 @@ def excel(annee_fiscale):
     months = range(number_of_months)
 
     used_accounts = []
-    for key, value in tableau.iteritems():
+    for key, value in tableau.items():
         if is_subcategory(value):
             subcategories = value
             category_name = key
@@ -88,7 +88,7 @@ def excel(annee_fiscale):
                 'detail': collections.OrderedDict(),
                 'type': 'subcategory'
             }
-            for subcategory_name, account_list in subcategories.iteritems():
+            for subcategory_name, account_list in subcategories.items():
                 result[category_name]['detail'][subcategory_name] = {
                     'total': [0] * number_of_months,
                     'detail': collections.OrderedDict(),
@@ -129,11 +129,15 @@ def excel(annee_fiscale):
         financial_lines = request_financial_lines(api, current_divisions, report_date.year, report_date.month)
         unused_lines = unused_lines + find_unused_lines(financial_lines, used_accounts)
 
-        for key, value in tableau.iteritems():
+        if not financial_lines:
+            return
+        import pdb; pdb.set_trace()
+
+        for key, value in tableau.items():
             if is_subcategory(value):
                 subcategories = value
                 category_name = key
-                for subcategory_name, account_list in subcategories.iteritems():
+                for subcategory_name, account_list in subcategories.items():
                     for (sign, account_number) in account_list:
                         make_account_list_totals(
                             operator_map[sign], account_number, financial_lines, month_index,
@@ -269,7 +273,7 @@ def is_account_list(category):
     return type(category[0][1]) is int
 
 def is_total_list(category):
-    return type(category[0][1]) is unicode
+    return type(category[0][1]) is str 
 
 def find_unused_lines(financial_lines, used_accounts):
     return [line for line in financial_lines if int(line['GLAccountCode']) not in used_accounts]
@@ -294,7 +298,7 @@ def make_account_list_totals(operation, account_number, financial_lines, month_i
 
 
 def make_total_list_totals(operation, category_name, category_list, result, month_index, *accumulateurs):
-    category_total = next((category['total'][month_index] for (category_label, category) in result.iteritems() if category_label == category_name), 0)
+    category_total = next((category['total'][month_index] for (category_label, category) in result.items() if category_label == category_name), 0)
     for accumulateur in accumulateurs:
         accumulateur[month_index] = operation(accumulateur[month_index], category_total)
 
