@@ -53,8 +53,8 @@ def excel(annee_fiscale):
     storage = get_storage()
     api = ExactApi(storage)
     api.refresh_token()
-    divisions, current_divisions = api.get_divisions()
-    print('Possible divisions {}'.format(divisions))
+    # divisions, current_divisions = api.get_divisions()
+    current_divisions = 17923
     print('Current division {}'.format(current_divisions))
 
     all_accounts = api.rest(GET( "v1/%d/financial/GLAccounts?$filter=startswith(Code,'6')+eq+true+or+startswith(Code,'7')+eq+true" % current_divisions))
@@ -275,7 +275,7 @@ def find_unused_lines(financial_lines, used_accounts):
     return [line for line in financial_lines if int(line['GLAccountCode']) not in used_accounts]
 
 def find_account_name(account_number, all_accounts):
-    account_name = next((account['Description'] for account in all_accounts if account['Code'] == str(account_number)), account_number)
+    account_name = next((account['Description'] for account in all_accounts if account['Code'] == str(account_number)), str(account_number))
     return account_name
 
 def find_account_total(account_number, all_financial_lines):
