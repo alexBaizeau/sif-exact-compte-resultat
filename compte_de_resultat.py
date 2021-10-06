@@ -9,7 +9,7 @@ import operator
 import re
 import webbrowser
 from time import sleep
-from urllib import quote, unquote
+from urllib.parse import quote, unquote
 
 import click
 import xlsxwriter
@@ -98,7 +98,7 @@ def excel(annee_fiscale):
     months = range(number_of_months)
 
     used_accounts = []
-    for key, value in tableau.iteritems():
+    for key, value in tableau.items():
         if is_subcategory(value):
             subcategories = value
             category_name = key
@@ -107,7 +107,7 @@ def excel(annee_fiscale):
                 "detail": collections.OrderedDict(),
                 "type": "subcategory",
             }
-            for subcategory_name, account_list in subcategories.iteritems():
+            for subcategory_name, account_list in subcategories.items():
                 result[category_name]["detail"][subcategory_name] = {
                     "total": [0] * number_of_months,
                     "detail": collections.OrderedDict(),
@@ -148,11 +148,11 @@ def excel(annee_fiscale):
         )
         unused_lines = unused_lines + find_unused_lines(financial_lines, used_accounts)
 
-        for key, value in tableau.iteritems():
+        for key, value in tableau.items():
             if is_subcategory(value):
                 subcategories = value
                 category_name = key
-                for subcategory_name, account_list in subcategories.iteritems():
+                for subcategory_name, account_list in subcategories.items():
                     for (sign, account_number) in account_list:
                         make_account_list_totals(
                             operator_map[sign],
@@ -385,7 +385,7 @@ def is_account_list(category):
 
 
 def is_total_list(category):
-    return type(category[0][1]) is unicode
+    return type(category[0][1]) is str
 
 
 def find_unused_lines(financial_lines, used_accounts):
@@ -451,7 +451,7 @@ def make_total_list_totals(
     category_total = next(
         (
             category["total"][month_index]
-            for (category_label, category) in result.iteritems()
+            for (category_label, category) in result.items()
             if category_label == category_name
         ),
         0,
