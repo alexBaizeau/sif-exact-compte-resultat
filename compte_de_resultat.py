@@ -431,10 +431,15 @@ def request_financial_lines(api, current_division, year, month):
         last_of_the_month,
     )
     request = (
-        "v1/%d/bulk/Financial/TransactionLines?$select=AmountDC,Date,EntryNumber,FinancialPeriod,FinancialYear,GLAccountCode,GLAccountDescription&$filter=%s"
+        "v1/%d/bulk/Financial/TransactionLines?$select=JournalCode,AmountDC,Date,EntryNumber,FinancialPeriod,FinancialYear,GLAccountCode,GLAccountDescription&$filter=%s"
         % (current_division, date_filter)
     )
-    return api.rest(GET(request))
+    financial_lines = api.rest(GET(request))
+    ## Filter out entries associated wit the period closing Journal as those reverse all journal entries when the financial period is closed
+    journal_codes_to_ignore = ["96"]
+    return [
+        fl for fl in financial_lines if fl["JournalCode"] not in journal_codes_to_ignore
+    ]
 
 
 def make_account_list_totals(
